@@ -1,10 +1,12 @@
-import React from 'react'
+import Header from './components/Header'
+import { ThemeProvider } from './context/ThemeContext'
 
 function App() {
   return (
-    <div>
-      
-    </div>
+    <ThemeProvider>
+      <Header/>
+    </ThemeProvider>
+        
   )
 }
 
