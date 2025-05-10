@@ -1,47 +1,52 @@
-function fcfs(){
-    const processId=[1,2,3,4,5,6];
-    const ArrivalTime=[0,1,2,3,4,5];
-    const BurstTime=[3,2,1,4,5,2];
-    let n=processId.length;
+function fcfs(processes) {
+    
+    // processes.sort((a, b) => a.arrival - b.arrival);
 
-    const waitingTime=[]
-    const completionTime=[];
-    const TurnAroundTime=[];
-    completionTime[0]=BurstTime[0];
-    for(let i=1;i<n;i++){
-        completionTime.push(completionTime[i-1]+BurstTime[i]);
-    }
-    for(let i=0;i<n;i++){
+    const processLenght = processes.length;
+    const result = [];
+    let currentTime = 0;
+    let totalWaitingTime = 0;
+    let totalTurnAroundTime = 0;
+
+    for (let i = 0; i < processLenght; i++) {
+        const { id, arrival, burst } = processes[i];
+
+       
+       const arrivalTime = Number(arrival);
+        const burstTime = Number(burst);
         
-        TurnAroundTime.push(completionTime[i]-ArrivalTime[i]);
-        waitingTime.push(TurnAroundTime[i]-BurstTime[i]);
-        console.log(`Process ${processId[i]}:`);
-        console.log(`  Arrival Time   : ${ArrivalTime[i]}`);
-        console.log(`  Burst Time     : ${BurstTime[i]}`);
-        console.log(`  Completion Time: ${completionTime[i]}`);
-        console.log(`  Turnaround Time: ${TurnAroundTime[i]}`);
-        console.log(`  Waiting Time   : ${waitingTime[i]}`);
-        console.log('---------------------------');
+        
+        if (currentTime < arrivalTime) {
+            currentTime = arrivalTime;
+        }
 
+        const completionTime = currentTime + burstTime;
+        const turnAroundTime = completionTime - arrivalTime;
+        const waitingTime = turnAroundTime - burstTime;
+
+        currentTime = completionTime; 
+
+        totalWaitingTime += waitingTime;
+        totalTurnAroundTime += turnAroundTime;
+
+        result.push({
+            processId: id,
+            arrivalTime: arrivalTime,
+            burstTime: burstTime,
+            completionTime,
+            turnAroundTime,
+            waitingTime
+        });
     }
 
-    let AverageWaitingTime=0
-    let avgTurnAroundTime=0;
-    for(let i=0;i<n;i++){
-        AverageWaitingTime+=waitingTime[i];
-        avgTurnAroundTime+=TurnAroundTime[i];
-    }
-    AverageWaitingTime/=n;
-    avgTurnAroundTime/=n;
+    const avgWaitingTime = totalWaitingTime / processLenght;
+    const avgTurnAroundTime = totalTurnAroundTime / processLenght;
 
-    console.log(AverageWaitingTime);
-    console.log(avgTurnAroundTime);
-    
-    
-
-
-
-
+    return {
+        process: result,
+        averageWaitingTime: avgWaitingTime,
+        averageTurnAroundTime: avgTurnAroundTime
+    };
 }
 
-fcfs();
+export default fcfs;

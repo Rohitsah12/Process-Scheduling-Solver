@@ -26,9 +26,10 @@ function Input() {
         setProcesses(updated);
     };
 
-    const handleOutput=()=>{
+    const handleOutput = () => {
         setShowOutput(true);
-    }
+    };
+
 
     return (
         <div className="flex w-full">
@@ -70,12 +71,15 @@ function Input() {
 
                 <div className="flex gap-2 flex-wrap">
                     <button
+                        type="button"
                         className="border p-2 rounded w-full sm:w-[150px] bg-slate-700 text-white"
                         onClick={handleAddProcess}
                     >
                         Add Process
                     </button>
-                    <button className="border p-2 rounded w-full sm:w-[150px] bg-slate-700 text-white cursor-pointer"
+                    <button
+                        type="button"
+                        className="border p-2 rounded w-full sm:w-[150px] bg-slate-700 text-white cursor-pointer"
                         onClick={handleOutput}   
                     >
                         Calculate
@@ -90,7 +94,7 @@ function Input() {
             </div>
             { showOutput && (
                 <div className="mt-5">
-                    <Output />
+                    <Output processes={processes} />
                 </div>
             )}
         </div>
