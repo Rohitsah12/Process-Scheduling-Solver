@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Alert } from "@material-tailwind/react";
 import Output from "./Output";
 
-function Input() {
+function Input({algo}) {
     const [processes, setProcesses] = useState([
         { id: "", arrival: "", burst: "" },
     ]);
@@ -16,6 +16,7 @@ function Input() {
             setShowAlert(true);
         } else {
             setShowAlert(false);
+            setShowOutput(false);
             setProcesses([...processes, { id: "", arrival: "", burst: "" }]);
         }
     };
@@ -94,7 +95,7 @@ function Input() {
             </div>
             { showOutput && (
                 <div className="mt-5">
-                    <Output processes={processes} />
+                    <Output processes={processes} algo={algo} />
                 </div>
             )}
         </div>

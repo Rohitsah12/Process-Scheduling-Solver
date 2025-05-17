@@ -1,6 +1,6 @@
 function fcfs(processes) {
     
-    // processes.sort((a, b) => a.arrival - b.arrival);
+    processes.sort((a, b) => a.arrival - b.arrival);
 
     const processLenght = processes.length;
     const result = [];

@@ -1,16 +1,28 @@
-import React from 'react'
+import Input from './Input'
+import React, { useState } from 'react'
 
 function Option() {
+  const [algo, setAlgo] = useState('fcfs');
+
   return (
-    <div className='m-4  w-[120px] border-2 dark:bg-black dark:text-white p-2'>
-      <select className='w-[100px]'>
-            <option value='fcfs' className='dark:bg-black dark:text-white'>FCFS</option>
-            <option value='SJF' className='dark:bg-black dark:text-white'>SJF</option>
-            <option value='ps' className='dark:bg-black dark:text-white'>PS</option>
-            <option value='rr' className='dark:bg-black dark:text-white'>RR</option>
-      </select>
+    <div className=" p-4 border-2 rounded dark:bg-black dark:text-white w-full">
+      <div className="mb-4">
+        <label className="block mb-2 font-semibold">Select Algorithm:</label>
+        <select
+          className="w-full sm:w-[200px] p-2 border rounded dark:bg-black dark:text-white"
+          onChange={(e) => setAlgo(e.target.value)}
+        >
+          <option value='fcfs'>FCFS</option>
+          <option value='SJF'>SJF</option>
+          <option value='SRTF'>SRTF</option>
+          <option value='ps'>PS</option>
+          <option value='rr'>RR</option>
+        </select>
+      </div>
+      <Input algo={algo} />
     </div>
-  )
+  );
 }
+
 
 export default Option
