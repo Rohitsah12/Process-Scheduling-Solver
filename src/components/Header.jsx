@@ -2,7 +2,7 @@ import DarkModeToggler from "./DarkModeToggler";
 import { Github } from "lucide-react";
 function Header() {
     return (
-        <div className="flex items-center justify-between w-full bg-[#f8f9fa] dark:text-white dark:bg-black h-[120px] p-5">
+        <div className="flex items-center justify-between w-full h-[120px] p-5">
             <h1 className="w-3/4 text-4xl font-bold">Process Scheduling Solver</h1>
             <div className="flex items-center gap-x-5">
                 <DarkModeToggler />
