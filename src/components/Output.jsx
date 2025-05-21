@@ -2,6 +2,7 @@ import { Alert } from "@material-tailwind/react";
 import { useEffect, useState, useMemo } from "react";
 import fcfs from "../Algorithm/fcfs";
 import sjfNonPreemptive from "../Algorithm/sjf";
+import srtfPreemptive from "../Algorithm/srtf";
 
 function Output({ processes, algo }) {
     const [showAlert, setShowAlert] = useState(false);
@@ -9,7 +10,7 @@ function Output({ processes, algo }) {
     const algorithmMap = {
         fcfs: fcfs,
         SJF: sjfNonPreemptive,
-        // Add more algorithms here
+        srtf:srtfPreemptive,
     };
 
     const schedulingFunction = algorithmMap[algo];
