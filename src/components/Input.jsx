@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Alert } from "@material-tailwind/react";
 import Output from "./Output";
+import { Calculator, Plus } from "lucide-react";
 
 function Input({ algo }) {
     const [processes, setProcesses] = useState([
@@ -56,7 +57,7 @@ function Input({ algo }) {
                     <div>Process ID</div>
                     <div>Arrival Time</div>
                     <div>Burst Time</div>
-                    {isPriorityAlgo && <div>Priority</div>}
+                    {isPriorityAlgo && <div>Priority (1 as highest)</div>}
                 </div>
 
                 {/* Inputs */}
@@ -117,21 +118,30 @@ function Input({ algo }) {
                     </div>
                 )}
 
-                {/* Buttons */}
-                <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                {/* Action Buttons */}
+                <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                     <button
                         onClick={handleAddProcess}
-                        className="bg-slate-700 text-white px-4 py-2 rounded w-full sm:w-40"
+                        className="flex flex-1 items-center justify-center rounded-lg px-4 py-2 text-white shadow-lg transition-all duration-200
+                                bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl
+                                dark:from-blue-500 dark:to-indigo-500 dark:hover:from-blue-400 dark:hover:to-indigo-400 dark:shadow-md dark:hover:shadow-lg"
                     >
+                        <Plus className="mr-2 h-4 w-4" />
                         Add Process
                     </button>
                     <button
                         onClick={handleOutput}
-                        className="bg-slate-700 text-white px-4 py-2 rounded w-full sm:w-40"
+                        className="flex flex-1 items-center justify-center rounded-lg px-4 py-2 text-white shadow-lg transition-all duration-200
+                                bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 hover:shadow-xl
+                                dark:from-emerald-500 dark:to-teal-500 dark:hover:from-emerald-400 dark:hover:to-teal-400 dark:shadow-md dark:hover:shadow-lg"
                     >
-                        Calculate
+                        <Calculator className="mr-2 h-4 w-4" />
+                        Calculate Schedule
                     </button>
                 </div>
+
+
+
 
                 {showAlert && (
                     <Alert className="bg-red-700 text-white mt-4 p-2">
