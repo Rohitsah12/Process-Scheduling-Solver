@@ -12,13 +12,13 @@ function Input({ algo }) {
     const [showOutput, setShowOutput] = useState(false);
 
     const algoLower = algo.toLowerCase();
-    const isPriorityAlgo = algoLower === "ps";
+    const isPriorityAlgo = algoLower.includes("ps");
     const isRoundRobin = algoLower === "rr";
 
     const handleAddProcess = () => {
         const last = processes[processes.length - 1];
-        const valid = last.id && last.arrival && last.burst &&
-            (!isPriorityAlgo || last.priority);
+        const valid = last.id !== "" && last.arrival !== "" && last.burst !== "" &&
+            (!isPriorityAlgo || last.priority !== "");
 
         if (!valid) {
             setShowAlert(true);
@@ -37,10 +37,16 @@ function Input({ algo }) {
     };
 
     const handleOutput = () => {
-        if (isRoundRobin && !quantum) {
+        const allValid = processes.every(p =>
+            p.id !== "" && p.arrival !== "" && p.burst !== "" &&
+            (!isPriorityAlgo || p.priority !== "")
+        );
+
+        if (!allValid || (isRoundRobin && !quantum)) {
             setShowAlert(true);
             return;
         }
+
         setShowAlert(false);
         setShowOutput(true);
     };
@@ -53,7 +59,9 @@ function Input({ algo }) {
 
             <div className="w-full mt-2 p-4 border rounded dark:bg-black dark:text-white">
                 {/* Headers */}
-                <div className="grid grid-cols-3 md:grid-cols-4 gap-2 font-bold text-sm md:text-base mb-2 text-center">
+                <div className={`grid gap-2 font-bold text-sm md:text-base mb-2 text-center ${
+                    isPriorityAlgo ? "grid-cols-4" : "grid-cols-3"
+                }`}>
                     <div>Process ID</div>
                     <div>Arrival Time</div>
                     <div>Burst Time</div>
@@ -64,12 +72,13 @@ function Input({ algo }) {
                 {processes.map((process, index) => (
                     <div
                         key={index}
-                        className="grid grid-cols-3 md:grid-cols-4 gap-2 mb-2"
+                        className={`grid gap-2 mb-2 ${
+                            isPriorityAlgo ? "grid-cols-4" : "grid-cols-3"
+                        }`}
                     >
                         <input
-                            type="number"
-                            min="0"
-                            placeholder="Process ID"
+                            type="text"
+                            placeholder="ID"
                             value={process.id}
                             onChange={(e) => handleChange(index, "id", e.target.value)}
                             className="border p-2 rounded"
@@ -77,7 +86,7 @@ function Input({ algo }) {
                         <input
                             type="number"
                             min="0"
-                            placeholder="Arrival Time"
+                            placeholder="Arrival"
                             value={process.arrival}
                             onChange={(e) => handleChange(index, "arrival", e.target.value)}
                             className="border p-2 rounded"
@@ -85,7 +94,7 @@ function Input({ algo }) {
                         <input
                             type="number"
                             min="0"
-                            placeholder="Burst Time"
+                            placeholder="Burst"
                             value={process.burst}
                             onChange={(e) => handleChange(index, "burst", e.target.value)}
                             className="border p-2 rounded"
@@ -103,7 +112,7 @@ function Input({ algo }) {
                     </div>
                 ))}
 
-                {/* Quantum Input for RR */}
+                {/* Quantum input for RR */}
                 {isRoundRobin && (
                     <div className="my-3">
                         <label className="block font-medium mb-1">Quantum Time</label>
@@ -118,13 +127,13 @@ function Input({ algo }) {
                     </div>
                 )}
 
-                {/* Action Buttons */}
+                {/* Buttons */}
                 <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                     <button
                         onClick={handleAddProcess}
                         className="flex flex-1 items-center justify-center rounded-lg px-4 py-2 text-white shadow-lg transition-all duration-200
-                                bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl
-                                dark:from-blue-500 dark:to-indigo-500 dark:hover:from-blue-400 dark:hover:to-indigo-400 dark:shadow-md dark:hover:shadow-lg"
+                            bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl
+                            dark:from-blue-500 dark:to-indigo-500 dark:hover:from-blue-400 dark:hover:to-indigo-400 dark:shadow-md dark:hover:shadow-lg"
                     >
                         <Plus className="mr-2 h-4 w-4" />
                         Add Process
@@ -132,20 +141,18 @@ function Input({ algo }) {
                     <button
                         onClick={handleOutput}
                         className="flex flex-1 items-center justify-center rounded-lg px-4 py-2 text-white shadow-lg transition-all duration-200
-                                bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 hover:shadow-xl
-                                dark:from-emerald-500 dark:to-teal-500 dark:hover:from-emerald-400 dark:hover:to-teal-400 dark:shadow-md dark:hover:shadow-lg"
+                            bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 hover:shadow-xl
+                            dark:from-emerald-500 dark:to-teal-500 dark:hover:from-emerald-400 dark:hover:to-teal-400 dark:shadow-md dark:hover:shadow-lg"
                     >
                         <Calculator className="mr-2 h-4 w-4" />
                         Calculate Schedule
                     </button>
                 </div>
 
-
-
-
+                {/* Alert */}
                 {showAlert && (
                     <Alert className="bg-red-700 text-white mt-4 p-2">
-                        Please fill all required fields {isRoundRobin ? "and enter quantum" : ""}.
+                        Please fill all required fields{isRoundRobin ? " and enter quantum time." : "."}
                     </Alert>
                 )}
             </div>

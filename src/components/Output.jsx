@@ -4,30 +4,46 @@ import fcfs from "../Algorithm/fcfs";
 import sjfNonPreemptive from "../Algorithm/sjf";
 import srtfPreemptive from "../Algorithm/srtf";
 import preemptivePriority from "../Algorithm/ps";
+import roundRobin from "../Algorithm/rr";
 
-function Output({ processes, algo }) {
+function Output({ processes, algo, quantum }) {
     const [showAlert, setShowAlert] = useState(false);
+
+    const algoLower = algo.toLowerCase();
 
     const algorithmMap = {
         fcfs,
-        SJF: sjfNonPreemptive,
+        sjf: sjfNonPreemptive,
         srtf: srtfPreemptive,
         ps: preemptivePriority,
+        rr: roundRobin,
     };
 
-    const schedulingFunction = algorithmMap[algo];
+    const schedulingFunction = algorithmMap[algoLower];
 
     useEffect(() => {
-        const allFilled = processes.every(p => p.id && p.arrival !== "" && p.burst !== "");
-        setShowAlert(!allFilled);
-    }, [processes]);
+        const allFilled = processes.every(p =>
+            p.id !== "" &&
+            p.arrival !== "" &&
+            p.burst !== "" &&
+            (algoLower !== "ps" || p.priority !== "")
+        );
+
+        const quantumValid = algoLower !== "rr" || (quantum && quantum > 0);
+
+        setShowAlert(!(allFilled && quantumValid));
+    }, [processes, quantum, algoLower]);
 
     const result = useMemo(() => {
         if (!showAlert && schedulingFunction) {
-            return schedulingFunction(processes);
+            if (algoLower === "rr") {
+                return schedulingFunction(processes, Number(quantum));
+            } else {
+                return schedulingFunction(processes);
+            }
         }
         return null;
-    }, [showAlert, processes, schedulingFunction]);
+    }, [showAlert, processes, schedulingFunction, quantum, algoLower]);
 
     if (!schedulingFunction) {
         return (
@@ -41,7 +57,8 @@ function Output({ processes, algo }) {
         <>
             {showAlert && (
                 <Alert className="bg-red-700 text-white mt-4 p-2">
-                    ⚠️ Please fill all fields for all processes before calculating.
+                    ⚠️ Please fill all fields correctly.
+                    {algoLower === "rr" && " Make sure to enter a valid quantum value."}
                 </Alert>
             )}
 
@@ -58,7 +75,7 @@ function Output({ processes, algo }) {
                                     <th className="px-4 py-2 border dark:border-gray-600">Process ID</th>
                                     <th className="px-4 py-2 border dark:border-gray-600">Arrival Time</th>
                                     <th className="px-4 py-2 border dark:border-gray-600">Burst Time</th>
-                                    {algo === "ps" && (
+                                    {algoLower === "ps" && (
                                         <th className="px-4 py-2 border dark:border-gray-600">Priority</th>
                                     )}
                                     <th className="px-4 py-2 border dark:border-gray-600">Completion Time</th>
@@ -76,7 +93,7 @@ function Output({ processes, algo }) {
                                         <td className="px-4 py-2 border text-center">{p.processId}</td>
                                         <td className="px-4 py-2 border text-center">{p.arrivalTime}</td>
                                         <td className="px-4 py-2 border text-center">{p.burstTime}</td>
-                                        {algo === "ps" && (
+                                        {algoLower === "ps" && (
                                             <td className="px-4 py-2 border text-center">{p.priority}</td>
                                         )}
                                         <td className="px-4 py-2 border text-center">{p.completionTime}</td>
@@ -85,7 +102,6 @@ function Output({ processes, algo }) {
                                     </tr>
                                 ))}
                             </tbody>
-
                         </table>
                     </div>
 

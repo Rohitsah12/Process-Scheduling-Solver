@@ -15,7 +15,7 @@ function Option() {
           <option value='fcfs' className='dark:bg-black dark:text-white'>FCFS</option>
           <option value='SJF' className='dark:bg-black dark:text-white'>SJF</option>
           <option value='srtf' className='dark:bg-black dark:text-white'>SRTF</option>
-          <option value='ps' className='dark:bg-black dark:text-white'>PS</option>
+          <option value='ps' className='dark:bg-black dark:text-white'>PS(preemtive)</option>
           <option value='rr' className='dark:bg-black dark:text-white' >RR</option>
         </select>
       </div>
